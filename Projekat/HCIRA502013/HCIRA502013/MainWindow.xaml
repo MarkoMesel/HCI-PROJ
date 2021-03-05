@@ -1,0 +1,1406 @@
+﻿<Window x:Class="HCIRA502013.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:val="clr-namespace:HCIRA502013"
+        xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        Title="MainWindow" Height="1056" Width="1920" WindowStartupLocation="CenterScreen" Closing="Window_Closing" WindowState="Maximized" KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Image x:Key="eraserCursor" Cursor="Resources/Eraser-icon.cur"/>
+            <BitmapImage x:Key="demoIcon" UriSource="Resources/Back.bmp"/>
+        </ResourceDictionary>
+    </Window.Resources>
+        <Grid>
+        <Grid.Resources>
+            <Style x:Key="CustomTextBoxTextStyle" TargetType="TextBox">
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TextBox}" >
+                            <!--<Border x:Name="bg" BorderBrush="#FF825E5E" BorderThickness="1" Background="White">-->
+                            <Border x:Name="bg" BorderBrush="Black" BorderThickness="1" Background="White">
+                                <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Validation.HasError" Value="True">
+                                    <Trigger.Setters>
+                                        <!--<Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self},Path=(Validation.Errors)[0].ErrorContent}"/>-->
+                                        <Setter Property="BorderThickness" TargetName="bg" Value="2"/>
+                                        <Setter Property="BorderBrush" TargetName="bg" Value="Red"/>
+                                    </Trigger.Setters>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsFocused" Value="True" />
+                                        <Condition Property="Validation.HasError" Value="False" />
+                                    </MultiTrigger.Conditions>
+                                    <MultiTrigger.Setters>
+                                            <Setter Property="BorderThickness" TargetName="bg" Value="2"/>
+                                            <Setter Property="BorderBrush" TargetName="bg" Value="LightGreen" />
+                                    </MultiTrigger.Setters>
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
+        <Grid Name="shortcutTabGrid" Margin="5,27,5,0" ZIndex ="1" Height="33" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <Button Click="idiNaGlavniTab_Click" Background="White" BorderBrush="Black" Content="G" FontWeight="Bold" Foreground="Black" Height="23" HorizontalAlignment="Left" Margin="0,6,0,0" Name="button1" VerticalAlignment="Top" Width="23" />
+            <Button Click="idiNaSpomenikTab_Click" Background="White" BorderBrush="Black" Content="S" FontWeight="Bold" Foreground="Black" Height="23" HorizontalAlignment="Left" Margin="29,6,0,0" Name="button57" VerticalAlignment="Top" Width="23" />
+            <Button Click="idiNaTipTab_Click" Background="White" BorderBrush="Black" Content="T" FontWeight="Bold" Foreground="Black" Height="23" HorizontalAlignment="Left" Margin="58,6,0,0" Name="button58" VerticalAlignment="Top" Width="23" />
+            <Button Click="idiNaEtiketaTab_Click" Background="White" BorderBrush="Black" Content="E" FontWeight="Bold" Foreground="Black" Height="23" Margin="87,6,0,0" Name="button59" VerticalAlignment="Top" HorizontalAlignment="Left" Width="23" />
+            <Button Click="idiNaHelpTab_Click" Background="White" BorderBrush="Black" Content="HELP!" FontWeight="Bold" Foreground="Black" Height="23" HorizontalAlignment="Right" Margin="0,6,0,0" Name="button60" VerticalAlignment="Top" Width="180" />
+            <TextBox Height="23" HorizontalAlignment="Stretch" Margin="146,6,271,0" Name="textBox16" VerticalAlignment="Top" />
+            <Button Background="White" BorderBrush="Black" Content="X" FontWeight="Bold" Foreground="Black" Height="23" HorizontalAlignment="Left" Margin="117,6,0,0" Name="button62" VerticalAlignment="Top" Width="23" Click="button62_Click" />
+            <Button Background="White" BorderBrush="Black" Content="Search
+" FontWeight="Bold" Foreground="Black" Height="23" HorizontalAlignment="Right" Margin="0,6,186,0" Name="button63" VerticalAlignment="Top" Width="79" Click="button63_Click" />
+        </Grid>
+        <TabControl HorizontalAlignment="Stretch" Name="tabControl1" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Background="White" SelectionChanged="tabControl1_SelectionChanged_1">
+            <!--
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ToolBar Height="39" HorizontalAlignment="Stretch" Name="toolBar1" VerticalAlignment="Top" Background="#FFB1B1B1" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+            -->
+            <TabItem Header="Glavna stranica" Name="homeTab">
+                <Grid Background="White">
+                    <!--<Separator Height="5" HorizontalAlignment="Stretch" Margin="0,47,0,0" Name="separator2" VerticalAlignment="Top" />-->
+                    <Rectangle HorizontalAlignment="Stretch" Margin="0,35,0,0" Name="rectBorderGlavnaStranica" Stroke="Black" VerticalAlignment="Stretch" Fill="White" />
+                    <Grid Margin="116,92,1,1" Name="spomenikPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <!--<ScrollViewer Name="scrollViewer1" ScrollChanged="scrollViewer1_ScrollChanged">-->
+                        <Grid Width="1224" HorizontalAlignment="Left">
+                        <DataGrid ItemsSource="{Binding spomenici}" AutoGenerateColumns="False" IsReadOnly="True" Name="dataGrid1" MaxWidth="Infinity" GridLinesVisibility="All" BorderBrush="White" ColumnHeaderHeight="30" Background="White" Foreground="Black" HeadersVisibility="All" IsEnabled="True" Margin="0,48,0,0" Height="844" SelectedCellsChanged="dataGrid1_SelectedCellsChanged" SelectionMode="Extended" SelectionChanged="dataGrid1_SelectionChanged" CurrentCellChanged="dataGrid1_CurrentCellChanged">
+                                <!-- <DataGrid.Resources>
+                                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="Background" Value="Black" />
+                                        <Setter Property="BorderBrush" Value="Black"/>
+                                        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                    </Style>
+                                </DataGrid.Resources>-->
+                            <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="Control">
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Background" Value="#FFE6E6E6" />
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <!--<Setter Property="BorderBrush" Value="Black"/>-->
+                                        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="Ikonica" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                            <Image Source="{Binding ikonica}" Stretch="None"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                <DataGridTextColumn Binding="{Binding oznaka}" Header="Oznaka" Width="60" FontWeight="Normal" />
+                                <DataGridTextColumn Binding="{Binding ime}" Header="Ime" Width="80" />
+                                <DataGridTextColumn Binding="{Binding tip.oznaka}" Header="Tip" Width="80" />
+                                <DataGridTextColumn Binding="{Binding datum}" Header="Datum" Width="80" />
+                                <DataGridTextColumn Binding="{Binding era}" Header="Era" Width="80" />
+                                <DataGridTextColumn Binding="{Binding status}" Header="Status" Width="80" />
+                                <DataGridTextColumn Binding="{Binding arhObr}" Header="Arheoloski obradjen" Width="140" />
+                                <DataGridTextColumn Binding="{Binding unesco}" Header="Na listi UNESCO" Width="120" />
+                                <DataGridTextColumn Binding="{Binding nasReg}" Header="Naseljeni region" FontWeight="Normal" Width="120" />
+                                <DataGridTextColumn Binding="{Binding prihod}" Header="Prihod" Width="100" />
+                                <DataGridTemplateColumn Header="Etikete">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ItemsControl ItemsSource="{Binding etikete}" DisplayMemberPath="oznaka"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Binding="{Binding opis}" Header="Opis" MinWidth="80" Width="*" />
+                            </DataGrid.Columns>
+                            </DataGrid>
+                        <Label Content="Pregled kreiranih spomenika" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" Name="label8" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" BorderBrush="White" BorderThickness="0" Background="Blue" Margin="0,1,0,0" />
+                            <Button Background="White" BorderBrush="Blue" Content="Refresh-uj Selekciju" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,6,6,0" Name="button15" VerticalAlignment="Top" Width="130" Click="button15_Click" />
+                        </Grid>
+                        <Grid Margin="1230,1,0,0" Name="grid4" Height="517" VerticalAlignment="Top">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Izmena podataka o spomeniku" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="label25" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <ScrollViewer Height="Auto" HorizontalAlignment="Stretch" Margin="0,47,0,0" Name="IzmeneView" VerticalAlignment="Stretch" Width="Auto" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch">
+                                <Grid Background="#FFE6E6E6" Name="grid6" Width="372">
+                                    <Grid Background="#FFE6E6E6" Name="spomenikOpisGrid">
+                                    <TextBox AcceptsReturn="True" AcceptsTab="False" Height="314" HorizontalAlignment="Left" Margin="13,48,0,0" Name="textBox6" Style="{StaticResource CustomTextBoxTextStyle}" TextWrapping="Wrap" VerticalAlignment="Top" Width="345">
+                                        <Binding Mode="TwoWay" Path="opis" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox>
+                                    <Label Content="Opis spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="13,14,0,0" Name="label31" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                    <Label Content="Polje ne sme ostati prazno." FontSize="12" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="13,368,0,0" Name="label32" Padding="0" VerticalAlignment="Top">
+                                        <Label.Style>
+                                            <Style TargetType="{x:Type Label}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=textBox6, Path=(Validation.HasError)}" Value="True">
+                                                        <Setter Property="Control.Foreground" Value="Red" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=textBox6, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                    </DataTrigger>
+                                                    </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                    <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiOpisBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiOpisBtn_Click" />
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikOznakaGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiOznakaBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiOznakaBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox7" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="346">
+                                            <Binding Mode="TwoWay" Path="oznaka" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                    <val:CheckIfUniqueAndNRSORule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Oznaka Spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label33" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno. Oznaka mora biti unikantna." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label34" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox7, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox7, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikImeGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiImeBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiImeBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox8" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="346">
+                                            <Binding Mode="TwoWay" Path="ime" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Ime spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label35" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno." FontSize="12" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label36" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox8, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox8, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikDatumGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiDatumBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiDatumBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox9" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="345" GotFocus="textBox4_GotFocus" LostFocus="textBox4_LostFocus">
+                                            <Binding Mode="TwoWay" Path="datum" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                    <val:CheckIfDateFormatRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Datum otkrivanja spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label37" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno. Format teksta mora biti 'xx/xx/xxxx'." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label38" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox9, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox9, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikPrihodGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiPrihodBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiPrihodBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox10" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="345">
+                                            <Binding Mode="TwoWay" Path="prihod" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                    <val:CheckIfOnlyNumbersRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Godisnji prihod od turizma (u dolarima)" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label39" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno. Tekst mora sadrzati samo brojeve." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label40" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox10, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox10, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikTipGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiTipBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiTipBtn_Click" />
+                                        <Label Content="Tip spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label41" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <!--
+                                        <Label Content="Nijedan tip nije kreiran. " FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="10,67,0,0" Name="label42" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                                        -->
+                                        <ComboBox DisplayMemberPath="oznaka" Height="23" HorizontalAlignment="Left" IsEnabled="True" ItemsSource="{Binding tipovi}" Margin="10,44,0,0" Name="comboBox4" Text="" VerticalAlignment="Top" Visibility="Visible" Width="346" />
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikEraGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiEraBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiEraBtn_Click" />
+                                        <Label Content="Era porekla spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label44" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <ComboBox SelectedValuePath="Content" Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="comboBox5" SelectedIndex="0" Text="" VerticalAlignment="Top" Visibility="Visible" Width="346">
+                                            <ComboBoxItem Content="Paleolit" />
+                                            <ComboBoxItem Content="Neolit" />
+                                            <ComboBoxItem Content="Stari vek" />
+                                            <ComboBoxItem Content="Srednji vek" />
+                                            <ComboBoxItem Content="Renesansa" />
+                                            <ComboBoxItem Content="Moderno doba" />
+                                        </ComboBox>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikStatusGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiStatusBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiStatusBtn_Click" />
+                                        <Label Content="Turisticki status spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label46" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <ComboBox SelectedValuePath="Content" Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="comboBox6" SelectedIndex="0" Text="" VerticalAlignment="Top" Visibility="Visible" Width="346">
+                                            <ComboBoxItem Content="Eksploatisan" />
+                                            <ComboBoxItem Content="Dostupan" />
+                                            <ComboBoxItem Content="Nedostupan" />
+                                        </ComboBox>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikObradjenGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiObradjenBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiObradjenBtn_Click" />
+                                        <Label Content="Spomenik je arheoloski obradjen." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label48" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <CheckBox Height="16" HorizontalAlignment="Left" Margin="204,22,0,0" Name="checkBox4" VerticalAlignment="Top" />
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikUnescoGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiUnescoBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiUnescoBtn_Click" />
+                                        <Label Content="Spomenik je na listi UNESCO." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label49" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <CheckBox Height="16" HorizontalAlignment="Left" Margin="182,22,0,0" Name="checkBox5" VerticalAlignment="Top" />
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikRegionGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiRegionBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiRegionBtn_Click" />
+                                        <Label Content="Spomenik se nalazi u naseljenom regionu." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label50" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <CheckBox Height="16" HorizontalAlignment="Left" Margin="252,22,0,0" Name="checkBox6" VerticalAlignment="Top" />
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikEtiketeGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiEtiketeBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiEtiketeBtn_Click" />
+                                        <Label Content="OPCIONO: Taguj spomenik" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="13,10,0,0" Name="label51" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Opciono, izaberi etikete kojima zelis da tagujes spomenik." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="10,267,0,0" Name="label52" Padding="0" VerticalAlignment="Top" />
+                                        <ListBox DisplayMemberPath="oznaka" Height="217" HorizontalAlignment="Left" ItemsSource="{Binding etikete}" Margin="13,44,0,0" Name="listBox2" SelectionMode="Multiple" VerticalAlignment="Top" Width="344" />
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="spomenikImageGrid">
+                                        <!--
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiImageBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiImageBtn_Click" />
+                                        -->
+                                            <Label Content="Ikonica spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label53" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Border BorderBrush="#FF000000" BorderThickness="1" Margin="10,47,328,0" Name="border2" VerticalAlignment="Top">
+                                            <Image Height="32" Name="image3" Stretch="Fill" VerticalAlignment="Top" Width="32" />
+                                        </Border>
+                                        <TextBlock Cursor="Hand" Height="23" HorizontalAlignment="Left" Margin="50,58,0,0" Name="textBlock2" Text="Klikni ovde da izaberes ikonicu" VerticalAlignment="Top" PreviewMouseLeftButtonDown="textBlock2_PreviewMouseLeftButtonDown"><TextBlock.Style><Style TargetType="TextBlock"><Style.Triggers><Trigger Property="UIElement.IsMouseOver" Value="True"><Setter Property="TextBlock.TextDecorations" Value="Underline" /></Trigger></Style.Triggers><Setter Property="TextBlock.Foreground" Value="Blue" /></Style></TextBlock.Style></TextBlock>
+                                    </Grid>
+                                    <Grid Background="White" Name="nijedanSGrid">
+                                        <Label Content="Nijedan spomenik nije selektovan." FontWeight="Bold" Height="28" HorizontalAlignment="Center" Margin="10,10,0,0" Name="nijedanSLabel" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                    </Grid>
+                                </Grid>
+                            </ScrollViewer>
+                            <Button Background="White" BorderBrush="Blue" Content="&lt;&lt;" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,5,49,0" Name="button16" VerticalAlignment="Top" Width="40" Click="button16_Click" />
+                            <Button Background="White" BorderBrush="Blue" Content="&gt;&gt;" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,5,5,0" Name="button17" VerticalAlignment="Top" Width="40" Click="button17_Click" />
+                        </Grid>
+                        <Grid Background="#FFE6E6E6" Margin="1230,524,0,0" Name="grid5" Height="368">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Filtriranje spomenika" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="label30" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <Button Content="Izlistaj Spomenike" Height="27" Margin="163,258,156,0" Name="button12" VerticalAlignment="Top" HorizontalAlignment="Center" Width="222" Click="button12_Click" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,115,0,0" Name="comboBox7" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="ime" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,173,0,0" Name="comboBox9" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="datum" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,202,0,0" Name="comboBox15" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="prihod" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,231,0,0" Name="comboBox16" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="tipOzn" />
+                            <CheckBox Content="Ime:" Height="16" HorizontalAlignment="Left" Margin="10,118,0,0" Name="checkBox7" VerticalAlignment="Top" Checked="checkBox7_CheckChanged" Unchecked="checkBox7_CheckChanged" />
+                            <CheckBox Content="Datum:" Height="16" HorizontalAlignment="Left" Margin="10,176,0,0" Name="checkBox9" VerticalAlignment="Top" Checked="checkBox9_CheckChanged" Unchecked="checkBox9_CheckChanged" />
+                            <CheckBox Content="Prihod:" Height="16" HorizontalAlignment="Left" Margin="10,205,0,0" Name="checkBox15" VerticalAlignment="Top" Checked="checkBox15_CheckChanged" Unchecked="checkBox15_CheckChanged" />
+                            <CheckBox Content="Oznaka tipa:" Height="16" HorizontalAlignment="Left" Margin="10,234,0,0" Name="checkBox16" VerticalAlignment="Top" Checked="checkBox16_CheckChanged" Unchecked="checkBox16_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,86,0,0" Name="comboBox18" Text="ageaaega" VerticalAlignment="Top" Width="120" SelectionChanged="comboBox18_SelectionChanged" IsEnabled="False" Tag="oznaka" />
+                            <CheckBox Content="Oznaka:" Height="16" HorizontalAlignment="Left" Margin="10,89,0,0" Name="checkBox18" VerticalAlignment="Top" Checked="checkBox18_CheckChanged" Unchecked="checkBox18_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="412,86,0,0" Name="comboBox10" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="era" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="412,115,0,0" Name="comboBox11" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="status" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="412,144,0,0" Name="comboBox12" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="arhObr" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="412,173,0,0" Name="comboBox13" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="unesco" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="412,202,0,0" Name="comboBox14" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="nasReg" />
+                            <CheckBox Content="Era:" Height="16" HorizontalAlignment="Left" Margin="308,89,0,0" Name="checkBox10" VerticalAlignment="Top" Checked="checkBox10_CheckChanged" Unchecked="checkBox10_CheckChanged" />
+                            <CheckBox Content="Status:" Height="16" HorizontalAlignment="Left" Margin="308,118,0,0" Name="checkBox11" VerticalAlignment="Top" Checked="checkBox11_CheckChanged" Unchecked="checkBox11_CheckChanged" />
+                            <CheckBox Content="Obradjen:" Height="16" HorizontalAlignment="Left" Margin="308,147,0,0" Name="checkBox12" VerticalAlignment="Top" Checked="checkBox12_CheckChanged" Unchecked="checkBox12_CheckChanged" />
+                            <CheckBox Content="Unesco:" Height="16" HorizontalAlignment="Left" Margin="308,176,0,0" Name="checkBox13" VerticalAlignment="Top" Checked="checkBox13_CheckChanged" Unchecked="checkBox13_CheckChanged" />
+                            <CheckBox Content="Naseljen:" Height="16" HorizontalAlignment="Left" Margin="308,205,0,0" Name="checkBox14" VerticalAlignment="Top" Checked="checkBox14_CheckChanged" Unchecked="checkBox14_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,144,0,0" Name="comboBox17" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="opis" />
+                            <CheckBox Content="Opis:" Height="16" HorizontalAlignment="Left" Margin="10,147,0,0" Name="checkBox17" VerticalAlignment="Top" Checked="checkBox17_CheckChanged" Unchecked="checkBox17_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" Margin="412,231,0,0" Name="comboBox8" VerticalAlignment="Top" Width="120" IsEnabled="False" Tag="etOzn" />
+                            <CheckBox Content="Oznaka etikete:" Height="16" HorizontalAlignment="Left" Margin="308,234,0,0" Name="checkBox8" VerticalAlignment="Top" Checked="checkBox8_CheckChanged" Unchecked="checkBox8_CheckChanged" />
+                            <ScrollViewer Name="spomenikFilterScrollViewer" Margin="6,298,5,1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                                <StackPanel Height="50" HorizontalAlignment="Left" Margin="0,0,0,0" Name="stackPanel2" VerticalAlignment="Top" Width="Auto" CanHorizontallyScroll="True" Orientation="Horizontal" >
+                                    <StackPanel.Resources>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Margin" Value="10,0,0,0"/>
+                                            <Setter Property="Width" Value="100"/>
+                                            <Setter Property="Height" Value="40"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                </StackPanel>
+                            </ScrollViewer>
+                            <Label Content="Selektujte kriterijume po kojima cete filtrirati spomenike." FontWeight="Bold" Height="28" HorizontalAlignment="Center" Margin="6,48,9,0" Name="label42" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="526" HorizontalContentAlignment="Center" />
+                            <Button Background="White" BorderBrush="Blue" Content="Refresh-uj Filtere I Rezultat" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,6,6,0" Name="button18" VerticalAlignment="Top" Width="175" Click="button18_Click" />
+                        </Grid>
+                        <!--</ScrollViewer>-->
+                    </Grid>
+                    <Grid Margin="116,92,1,1" Name="tipPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <Grid Width="1224" HorizontalAlignment="Left">
+                            <Label Content="Pregled kreiranih tipova" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" Name="labelPregledTip" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" BorderBrush="White" BorderThickness="0" Background="Blue" Margin="0,1,0,0" />
+                            <DataGrid AutoGenerateColumns="False" Background="White" BorderBrush="White" ColumnHeaderHeight="30" Foreground="Black" GridLinesVisibility="All" HeadersVisibility="All" IsEnabled="True" MaxWidth="Infinity" Name="dataGrid2" Width="Auto" ItemsSource="{Binding tipovi}" SelectionChanged="dataGrid2_SelectionChanged" IsReadOnly="True" Height="844" Margin="0,48,0,0" SelectedCellsChanged="dataGrid2_SelectedCellsChanged" CurrentCellChanged="dataGrid2_CurrentCellChanged">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="Control">
+                                        <Setter Property="Control.FontWeight" Value="Bold" />
+                                        <Setter Property="Control.Background" Value="#FFE6E6E6" />
+                                        <Setter Property="Control.Foreground" Value="Black" />
+                                        <Setter Property="Control.BorderThickness" Value="0,0,1,0" />
+                                        <Setter Property="Control.Padding" Value="5" />
+                                        <Setter Property="Control.HorizontalContentAlignment" Value="Left" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <!--<DataGridTextColumn Header="Ikonica" Width="Auto" />-->
+                                    <DataGridTemplateColumn Header="Ikonica" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding ikonica}" Stretch="None" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Binding="{Binding oznaka}" Header="Oznaka" Width="60" />
+                                    <DataGridTextColumn Binding="{Binding ime}" Header="Ime" Width="80" />
+                                    <DataGridTextColumn Binding="{Binding opis}" Header="Opis" MinWidth="80" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Background="White" BorderBrush="Blue" Content="Refresh-uj Selekciju" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,6,6,0" Name="button21" VerticalAlignment="Top" Width="130" Click="button21_Click" />
+                        </Grid>
+                        <Grid Margin="1230,1,0,0" Name="gridIzmenaTip" Height="517" VerticalAlignment="Top">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Izmena podataka o tipu" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="labelIzmenaTip" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <ScrollViewer Height="Auto" HorizontalAlignment="Stretch" Margin="0,47,0,0" Name="IzmeneTipView" VerticalAlignment="Stretch" Width="Auto" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch">
+                                <Grid Background="#FFE6E6E6" Name="grid7" Width="372">
+                                    <Grid Background="#FFE6E6E6" Name="tipOpisGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiOpisTipBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiOpisTipBtn_Click" />
+                                        <TextBox AcceptsReturn="True" AcceptsTab="False" Height="314" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox11" Style="{StaticResource CustomTextBoxTextStyle}" TextWrapping="Wrap" VerticalAlignment="Top" Width="345">
+                                            <Binding Mode="TwoWay" Path="opis" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Opis tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label55" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno." FontSize="12" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,364,0,0" Name="label56" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox11, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox11, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="tipOznakaGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiOznakaTipBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiOznakaTipBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox12" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="346">
+                                            <Binding Mode="TwoWay" Path="oznaka" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                    <val:CheckIfUniqueAndNRTORule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Oznaka Tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label57" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno. Oznaka mora biti unikantna." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label58" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox12, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox12, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="tipImeGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiImeTipBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiImeTipBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox13" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="346">
+                                            <Binding Mode="TwoWay" Path="ime" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Ime tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label59" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno." FontSize="12" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label60" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox13, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox13, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="tipImageGrid">
+                                        <!--
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiImageTipBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiImageTipBtn_Click" />
+                                        -->
+                                        <Label Content="Ikonica tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label61" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Border BorderBrush="#FF000000" BorderThickness="1" Height="34" Margin="10,47,328,0" Name="border3" VerticalAlignment="Top">
+                                            <Image Height="32" Name="image4" Stretch="Fill" Width="32" />
+                                        </Border>
+                                        <TextBlock Cursor="Hand" Height="23" HorizontalAlignment="Left" Margin="50,58,0,0" Name="textBlock3" Text="Klikni ovde da izaberes ikonicu" VerticalAlignment="Top" PreviewMouseLeftButtonDown="textBlock3_PreviewMouseLeftButtonDown"><TextBlock.Style><Style TargetType="TextBlock"><Style.Triggers><Trigger Property="UIElement.IsMouseOver" Value="True"><Setter Property="TextBlock.TextDecorations" Value="Underline" /></Trigger></Style.Triggers><Setter Property="TextBlock.Foreground" Value="Blue" /></Style></TextBlock.Style></TextBlock>
+                                    </Grid>
+                                    <Grid Background="White" Name="nijedanTGrid">
+                                        <Label Content="Nijedan tip nije selektovan." FontWeight="Bold" Height="28" HorizontalAlignment="Center" Margin="10,10,0,0" Name="nijedanTLabel" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                    </Grid>
+                                </Grid>
+                            </ScrollViewer>
+                            <Button Background="White" BorderBrush="Blue" Content="&lt;&lt;" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,5,49,0" Name="button19" VerticalAlignment="Top" Width="40" Click="button19_Click_1" />
+                            <Button Background="White" BorderBrush="Blue" Content="&gt;&gt;" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,5,5,0" Name="button20" VerticalAlignment="Top" Width="40" Click="button20_Click" />
+                        </Grid>
+                        <Grid Margin="1230,524,0,0" Background="#FFE6E6E6" Name="gridFiltriranjeTip" Height="368">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Filtriranje tipova" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="labelPretragaTip" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <Button Content="Izlistaj Tipove" Height="27" HorizontalAlignment="Center" Margin="163,258,156,0" Name="button13" VerticalAlignment="Top" Width="222" Click="button13_Click" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" IsEnabled="True" Margin="114,144,0,0" Name="comboBox19" Tag="ime" VerticalAlignment="Top" Width="120" IsEditable="True" IsReadOnly="True" Visibility="Hidden" />
+                            <CheckBox Content="Ime:" Height="16" HorizontalAlignment="Left" Margin="10,147,0,0" Name="checkBox19" VerticalAlignment="Top" Checked="checkBox19_CheckChanged" Unchecked="checkBox19_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" IsEnabled="True" Margin="114,86,0,0" Name="comboBox23" Tag="oznaka" Text="" VerticalAlignment="Top" Width="120" IsEditable="True" IsReadOnly="True" Visibility="Hidden" />
+                            <CheckBox Content="Oznaka:" Height="16" HorizontalAlignment="Left" Margin="10,89,0,0" Name="checkBox23" VerticalAlignment="Top" Checked="checkBox23_CheckChanged" Unchecked="checkBox23_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" IsEnabled="True" Margin="114,202,0,0" Name="comboBox29" Tag="opis" VerticalAlignment="Top" Width="120" IsEditable="True" IsReadOnly="True" Visibility="Hidden" />
+                            <CheckBox Content="Opis:" Height="16" HorizontalAlignment="Left" Margin="10,205,0,0" Name="checkBox29" VerticalAlignment="Top" Checked="checkBox29_CheckChanged" Unchecked="checkBox29_CheckChanged" />
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="6,298,5,1" Name="scrollViewer4" VerticalScrollBarVisibility="Auto">
+                                <StackPanel CanHorizontallyScroll="True" Height="50" HorizontalAlignment="Left" Margin="0,0,0,0" Name="stackPanel3" Orientation="Horizontal" VerticalAlignment="Top" Width="Auto">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="FrameworkElement.Margin" Value="10,0,0,0" />
+                                            <Setter Property="FrameworkElement.Width" Value="100" />
+                                            <Setter Property="FrameworkElement.Height" Value="40" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                </StackPanel>
+                            </ScrollViewer>
+                            <Label Content="Selektujte kriterijume po kojima cete filtrirati tipove." FontWeight="Bold" Height="28" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="6,48,9,0" Name="label43" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="526" />
+                            <Button Background="White" BorderBrush="Blue" Content="Refresh-uj Filtere I Rezultat" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,6,6,0" Name="button22" VerticalAlignment="Top" Width="175" Click="button22_Click" />
+                        </Grid>
+                    </Grid>
+                    <Grid Margin="116,92,1,1" Name="etiketaPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <Grid Width="1224" HorizontalAlignment="Left">
+                            <Label Content="Pregled kreiranih etiketa" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" Name="labelPregledEtiketa" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" BorderBrush="White" BorderThickness="0" Background="Blue" Margin="0,1,0,0" />
+                            <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" Background="White" BorderBrush="White" ColumnHeaderHeight="30" Foreground="Black" GridLinesVisibility="All" HeadersVisibility="All" IsEnabled="True" MaxWidth="Infinity" Name="dataGrid3" Width="Auto" ItemsSource="{Binding etikete}" SelectionMode="Extended" IsReadOnly="True" Height="844" Margin="0,48,0,0" SelectionChanged="dataGrid3_SelectionChanged" SelectedCellsChanged="dataGrid3_SelectedCellsChanged" CurrentCellChanged="dataGrid3_CurrentCellChanged">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="Control">
+                                        <Setter Property="Control.FontWeight" Value="Bold" />
+                                        <Setter Property="Control.Background" Value="#FFE6E6E6" />
+                                        <Setter Property="Control.Foreground" Value="Black" />
+                                        <Setter Property="Control.BorderThickness" Value="0,0,1,0" />
+                                        <Setter Property="Control.Padding" Value="5" />
+                                        <Setter Property="Control.HorizontalContentAlignment" Value="Left" />
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding boja}" Header="Boja" Width="80">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Background" Value="{Binding Path=boja}"/>
+                                                <Setter Property="Foreground" Value="{Binding Path=boja}"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding oznaka}" Header="Oznaka" Width="60" />
+                                    <DataGridTextColumn Binding="{Binding opis}" Header="Opis" MinWidth="80" Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Background="White" BorderBrush="Blue" Content="Refresh-uj Selekciju" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,6,6,0" Name="button25" VerticalAlignment="Top" Width="130" Click="button25_Click" />
+                        </Grid>
+                        <Grid Margin="1230,1,0,0" Name="gridIzmenaEtiketa" Height="517" VerticalAlignment="Top">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Izmena podataka o etiketi" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="labelIzmenaEtiketa" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <ScrollViewer Height="Auto" HorizontalAlignment="Stretch" Margin="0,47,0,0" Name="IzmeneEtiketaView" VerticalAlignment="Stretch" Width="Auto" HorizontalContentAlignment="Left" VerticalContentAlignment="Stretch">
+                                <Grid Background="#FFE6E6E6" Name="grid8" Width="372">
+                                    <Grid Background="#FFE6E6E6" Name="etiketaOpisGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiOpisEtiketaBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiOpisEtiketaBtn_Click" />
+                                        <TextBox AcceptsReturn="True" AcceptsTab="False" Height="314" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox14" Style="{StaticResource CustomTextBoxTextStyle}" TextWrapping="Wrap" VerticalAlignment="Top" Width="345">
+                                            <Binding Mode="TwoWay" Path="opis" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Opis etikete" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label63" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="10,364,0,0" Name="label64" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox14, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox14, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>
+                                    <Grid Background="#FFE6E6E6" Name="etiketaOznakaGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiOznakaEtiketaBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiOznakaEtiketaBtn_Click" />
+                                        <TextBox Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="textBox15" Style="{StaticResource CustomTextBoxTextStyle}" VerticalAlignment="Top" Width="346">
+                                            <Binding Mode="TwoWay" Path="oznaka" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <val:CheckIfEmptyRule />
+                                                    <val:CheckIfUniqueAndNREORule />
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox>
+                                        <Label Content="Oznaka etikete" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label65" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Polje ne sme ostati prazno. Oznaka mora biti unikantna." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label66" Padding="0" VerticalAlignment="Top">
+                                            <Label.Style>
+                                                <Style TargetType="{x:Type Label}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox15, Path=(Validation.HasError)}" Value="True">
+                                                            <Setter Property="Control.Foreground" Value="Red" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ElementName=textBox15, Path=(Validation.HasError)}" Value="False">
+                                                            <Setter Property="Control.Foreground" Value="#FFE6E6E6" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                    </Grid>                                   
+                                    <Grid Background="#FFE6E6E6" Name="etiketaBojaGrid">
+                                        <Button Content="Potvrdi izmene" HorizontalAlignment="Left" Margin="96,411,0,0" Name="potvrdiBojaEtiketaBtn" Width="179" Height="46" VerticalAlignment="Top" Click="potvrdiBojaEtiketaBtn_Click" />
+                                        <wpfTool:ColorPicker DisplayColorAndName="False" Height="23" HorizontalAlignment="Left" Margin="10,44,0,0" Name="colorPicker2" SelectedColor="White" VerticalAlignment="Top" Width="60" />
+                                        <Label Content="Boja etikete" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="label67" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                        <Label Content="Izaberi boju. Ako se nista ne izabere, boja ce ostati bela." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="10,73,0,0" Name="label68" Padding="0" VerticalAlignment="Top" />
+                                    </Grid>
+                                    <Grid Background="White" Name="nijedanEGrid">
+                                        <Label Content="Nijedna etiketa nije selektovana." FontWeight="Bold" Height="28" HorizontalAlignment="Center" Margin="10,10,0,0" Name="nijedanELabel" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                    </Grid>
+                                </Grid>
+                            </ScrollViewer>
+                            <Button Background="White" BorderBrush="Blue" Content="&lt;&lt;" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,5,49,0" Name="button23" VerticalAlignment="Top" Width="40" Click="button23_Click" />
+                            <Button Background="White" BorderBrush="Blue" Content="&gt;&gt;" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,5,5,0" Name="button24" VerticalAlignment="Top" Width="40" Click="button24_Click" />
+                        </Grid>
+                        <Grid Margin="1230,524,0,0" Name="gridFiltriranjeEtiketa" Background="#FFE6E6E6" Height="368">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Filtriranje etiketa" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="labelPretragaEtiketa" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <Button Content="Izlistaj Etikete" Height="27" HorizontalAlignment="Center" Margin="163,258,156,0" Name="button14" VerticalAlignment="Top" Width="222" Click="button14_Click" />
+                            <CheckBox Content="Boja:" Height="16" HorizontalAlignment="Left" Margin="10,147,0,0" Name="checkBox20" VerticalAlignment="Top" Checked="checkBox20_CheckChanged" Unchecked="checkBox20_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" IsEditable="True" IsEnabled="True" IsReadOnly="True" Margin="114,86,0,0" Name="comboBox21" Tag="oznaka" Text="" VerticalAlignment="Top" Visibility="Hidden" Width="120" />
+                            <CheckBox Content="Oznaka:" Height="16" HorizontalAlignment="Left" Margin="10,89,0,0" Name="checkBox21" VerticalAlignment="Top" Checked="checkBox21_CheckChanged" Unchecked="checkBox21_CheckChanged" />
+                            <ComboBox Height="23" HorizontalAlignment="Left" IsEditable="True" IsEnabled="True" IsReadOnly="True" Margin="114,202,0,0" Name="comboBox22" Tag="opis" VerticalAlignment="Top" Visibility="Hidden" Width="120" />
+                            <CheckBox Content="Opis:" Height="16" HorizontalAlignment="Left" Margin="10,205,0,0" Name="checkBox22" VerticalAlignment="Top" Checked="checkBox22_CheckChanged" Unchecked="checkBox22_CheckChanged" />
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" Margin="6,298,5,2" Name="scrollViewer5" VerticalScrollBarVisibility="Auto">
+                                <StackPanel CanHorizontallyScroll="True" Height="50" HorizontalAlignment="Left" Margin="0,0,0,0" Name="stackPanel4" Orientation="Horizontal" VerticalAlignment="Top" Width="Auto">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="FrameworkElement.Margin" Value="10,0,0,0" />
+                                            <Setter Property="FrameworkElement.Width" Value="100" />
+                                            <Setter Property="FrameworkElement.Height" Value="40" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                </StackPanel>
+                            </ScrollViewer>
+                            <Label Content="Selektujte kriterijume po kojima cete filtrirati etikete." FontWeight="Bold" Height="28" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="6,48,9,0" Name="label45" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="526" />
+                            <wpfTool:ColorPicker ShowAdvancedButton="False" AvailableColors ="{Binding bojeZaFilter}" StandardColors="{Binding bojeZaFilter}" DisplayColorAndName="False" Height="23" HorizontalAlignment="Left" Margin="114,144,0,0" Name="colorPicker3" SelectedColor="White" VerticalAlignment="Top" Width="120" Visibility="Hidden" Tag="boja" />
+                            <Button Background="White" BorderBrush="Blue" Content="Refresh-uj Filtere I Rezultat" FontWeight="Bold" Foreground="Blue" Height="31" HorizontalAlignment="Right" Margin="0,6,6,0" Name="button26" VerticalAlignment="Top" Width="175" Click="button26_Click" />
+                        </Grid>
+                    </Grid>
+                    <Grid Margin="116,92,1,1" Name="mapaPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <Grid Width="274" HorizontalAlignment="Left" Name="mapaTreeGrid">
+                            <Label Content="Pregled spomenika" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" Name="spomeniciMapaLabel" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" BorderBrush="White" BorderThickness="0" Background="Blue" Margin="0,1,0,0" />
+                            <ListBox ItemsSource="{Binding spomenici}" DisplayMemberPath="oznaka" Height="838" HorizontalAlignment="Left" Margin="6,48,0,0" Name="listBox3" VerticalAlignment="Top" Width="262" PreviewMouseLeftButtonDown="listBox3_PreviewMouseLeftButtonDown" MouseMove="listBox3_MouseMove" SelectionChanged="listBox3_SelectionChanged" />
+                        </Grid>
+                        <Grid Margin="280,1,0,0" Name="mapaPictureGrid" Height="892" VerticalAlignment="Top">
+                            <Label Background="Blue" BorderBrush="White" BorderThickness="0" Content="Mapa" FontSize="18" FontWeight="Bold" Foreground="White" Height="41" HorizontalContentAlignment="Left" Name="mapaSlika" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                            <Canvas Width="1498" Height="839" HorizontalAlignment="Left" Margin="6,47,0,7" Name="canvas1" VerticalAlignment="Top" AllowDrop="True" DragEnter="canvas1_DragEnter" Drop="canvas1_Drop" MouseLeftButtonDown="canvas1_MouseLeftButtonDown" MouseLeftButtonUp="canvas1_MouseLeftButtonUp" MouseMove="canvas1_MouseMove" MouseUp="canvas1_MouseUp" />
+                            <Label Content="Kolizija prilikom pomeranja?" Height="31" Margin="127,10,0,0" Name="label17" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" HorizontalAlignment="Left" Width="171" />
+                            <Button Background="White" BorderBrush="Blue" Content="Ne" FontWeight="Bold" Foreground="Blue" Height="31" Margin="296,5,0,0" Name="button9" VerticalAlignment="Top" Click="button9_Click_1" HorizontalAlignment="Left" Width="96" />
+                            <Label Content="Rezim rada na mapi?" FontWeight="Bold" Foreground="White" Height="31" Margin="477,10,0,0" Name="label20" VerticalAlignment="Top" HorizontalAlignment="Left" Width="127" />
+                            <Button Background="White" BorderBrush="Blue" Content="Pomeranje" FontWeight="Bold" Foreground="Blue" Height="31" Margin="603,5,0,0" Name="button11" VerticalAlignment="Top" Click="button11_Click_1" HorizontalAlignment="Left" Width="96" />
+                        </Grid>
+                    </Grid>
+                    <Rectangle Height="52" HorizontalAlignment="Stretch" Name="rectGlavnaStranica" Stroke="Blue" VerticalAlignment="Top" Fill="Blue" Margin="1,36,1,0"/>
+                    <Label Content="Glavna stranica" Height="50" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="816" Foreground="White" FontWeight="Bold" FontSize="24" Margin="1,35,0,0" />
+                    <StackPanel HorizontalAlignment="Left" Margin="1,93,0,0" Name="stackPanel1" VerticalAlignment="Stretch" Width="110">
+                        <Label Content="Spomenici" Height="30" Name="spomenikLabel" Width="111" MouseLeftButtonUp="label_MouseLeftButtonUp" MouseEnter="label_MouseEnter" MouseLeave="label_MouseLeave" VerticalContentAlignment="Center" MouseLeftButtonDown="label_MouseLeftButtonDown" />
+                        <Label Content="Tipovi" Height="30" Name="tipoviLabel" Width="111" MouseLeftButtonUp="label_MouseLeftButtonUp" MouseEnter="label_MouseEnter" MouseLeave="label_MouseLeave" VerticalContentAlignment="Center" MouseLeftButtonDown="label_MouseLeftButtonDown"/>
+                        <Label Content="Etikete" Height="30" Name="etiketeLabel" Width="111" MouseLeftButtonUp="label_MouseLeftButtonUp" MouseEnter="label_MouseEnter" MouseLeave="label_MouseLeave" VerticalContentAlignment="Center" MouseLeftButtonDown="label_MouseLeftButtonDown" BorderThickness="0" />
+                        <Label Content="Mapa" Height="30" Name="mapaLabel" Width="111" MouseLeftButtonUp="label_MouseLeftButtonUp" MouseEnter="label_MouseEnter" MouseLeave="label_MouseLeave" VerticalContentAlignment="Center" MouseLeftButtonDown="label_MouseLeftButtonDown" />
+                    </StackPanel>
+                    <Button Content="Kreiraj Spomenik" Height="42" HorizontalAlignment="Left" Margin="333,39,0,0" Name="button5" VerticalAlignment="Top" Width="130" Background="White" Foreground="Blue" BorderBrush="Blue" FontWeight="Bold" Click="button5_Click" />
+                    <Grid Visibility="Hidden"  Height="42" HorizontalAlignment="Left" Margin="607,39,0,0" Name="izmeniGrid" VerticalAlignment="Top" Width="590" Background="White">
+                        <Label Content="Izmeni Spomenik" Height="42" HorizontalAlignment="Left" Name="labelNaslovZaIzmenu" VerticalAlignment="Top" Width="129" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" Foreground="Blue" BorderThickness="0" />
+                        <Label BorderThickness="0" Content="Nijedan spomenik nije selektovan." FontWeight="Bold" Foreground="Black" Height="42" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="128,0,0,0" Name="labelZaIzmenu" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="284" />
+                        <Button Background="Blue" BorderBrush="White" Content="Ok" FontWeight="Bold" Foreground="White" Height="26" HorizontalAlignment="Left" Margin="504,8,0,0" Name="nijedanNijeSelektovan" VerticalAlignment="Top" Width="80" Click="nijeSelektovan_Click" />
+                    </Grid>
+                    <Button Background="White" BorderBrush="Blue" Content="Izmeni Spomenik" FontWeight="Bold" Foreground="Blue" Height="42" HorizontalAlignment="Left" Margin="605,39,0,0" Name="button6" VerticalAlignment="Top" Width="130" Click="button6_Click" />
+                    <Grid Visibility="Hidden"  Height="42" HorizontalAlignment="Left" Margin="1202,39,0,0" Name="izbrisiGrid" VerticalAlignment="Top" Width="590" Background="White">
+                        <Label Content="Izbrisi Spomenik" Height="42" HorizontalAlignment="Left" Name="labelNaslovZaBrisanje" VerticalAlignment="Top" Width="129" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" Foreground="Blue" BorderThickness="0" />
+                        <Label BorderThickness="0" Content="Da li si siguran da zelis da obrises spomenik?" FontWeight="Bold" Foreground="Black" Height="42" HorizontalAlignment="Left" HorizontalContentAlignment="Left" Margin="128,0,0,0" Name="labelZaBrisanje" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="284" />
+                        <Button Background="White" BorderBrush="Blue" Content="Ne" FontWeight="Bold" Foreground="Blue" Height="26" HorizontalAlignment="Left" Margin="418,8,0,0" Name="odustaniOdBrisanja" VerticalAlignment="Top" Width="80" Click="button9_Click" />
+                        <Button Background="Blue" BorderBrush="White" Content="Da" FontWeight="Bold" Foreground="White" Height="26" HorizontalAlignment="Left" Margin="504,8,0,0" Name="potvrdiBrisanje" VerticalAlignment="Top" Width="80" Click="potvrdiBrisanje_Click" />
+                    </Grid>
+                    <Button Background="White" BorderBrush="Blue" Content="Izbrisi Spomenik" FontWeight="Bold" Foreground="Blue" Height="42" Margin="1200,39,0,0" Name="button7" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" Click="button7_Click" />
+                    <Button Background="White" BorderBrush="Blue" Content="Nadji Spomenik" FontWeight="Bold" Foreground="Blue" Height="42" Margin="469,39,0,0" Name="button8" VerticalAlignment="Top" HorizontalAlignment="Left" Width="130" Click="button8_Click_1" />
+                    <Button Background="White" BorderBrush="Blue" Content="Demo" FontWeight="Bold" Foreground="Blue" Height="42" Margin="0,39,6,0" Name="button10" VerticalAlignment="Top" HorizontalAlignment="Right" Width="84" Click="button10_Click" />
+                    </Grid>
+            </TabItem>
+            <TabItem Header="Spomenik" Name="spomenikTab" Visibility="Hidden">
+                <Grid Background="White">
+                    <Rectangle HorizontalAlignment="Stretch" Margin="0,35,0,0" Name="rectBorderNoviSpomenik" Stroke="Black" VerticalAlignment="Stretch" Fill="White" />
+                    <Rectangle Height="52" HorizontalAlignment="Stretch" Name="rectNoviSpomenik" Stroke="Blue" VerticalAlignment="Top" Fill="Blue" Margin="1,36,1,0"/>
+                    <Label Content="Kreiraj novi spomenik" Height="50" HorizontalAlignment="Left" Name="labelNoviSpomenik" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="1330" Foreground="White" FontWeight="Bold" FontSize="24" Margin="1,35,0,0" />
+                    <DockPanel Margin="1,92,1,1" Name="newSpPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <ScrollViewer Name="scrollViewer1" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" ScrollChanged="scrollViewer1_ScrollChanged_1">
+                            <Grid Name="grid1" Width="790" VerticalAlignment="Stretch" Background="#FFE6E6E6" MaxHeight="Infinity" MinHeight="892">
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,51,0,0" Name="textBox1" VerticalAlignment="Top" Width="346" TextChanged="textBox1_TextChanged">
+                                    <TextBox.Text>
+                                        <Binding Path="oznaka" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                                <val:CheckIfUniqueRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                        <Label Content="Oznaka Spomenika" Height="28" HorizontalAlignment="Left" Margin="14,17,0,0" Name="label2" VerticalAlignment="Top" VerticalContentAlignment="Bottom" FontWeight="Bold" Padding="0" />
+                                <Label Content="Polje ne sme ostati prazno. Oznaka mora biti unikantna." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,80,0,0" Name="label3" VerticalAlignment="Top" Padding="0" FontSize="12">
+                                    <Label.Style>
+                                        <Style TargetType="{x:Type Label}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=textBox1,Path=(Validation.HasError)}" Value="True">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ElementName=textBox1,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,148,0,0" Name="textBox2" VerticalAlignment="Top" Width="346" TextChanged="textBox2_TextChanged">
+                                    <TextBox.Text>
+                                        <Binding Path="ime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Ime spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,114,0,0" Name="label4" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="14,177,0,0" Name="label5" Padding="0" VerticalAlignment="Top">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBox2,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBox2,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <Label Content="Tip spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,405,0,0" Name="label6" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Nijedan tip nije kreiran. " FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="14,462,0,0" Name="label7" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Center" />
+                                <ComboBox ItemsSource="{Binding tipovi}" DisplayMemberPath="oznaka" Height="23" HorizontalAlignment="Left" Margin="14,439,0,0" Name="comboBox1" VerticalAlignment="Top" Width="346" Text="" Visibility="Visible" IsEnabled="False" SelectionChanged="comboBox1_SelectionChanged" />
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="314" HorizontalAlignment="Left" Margin="426,51,0,0" Name="textBox3" VerticalAlignment="Top" Width="345" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="False" >
+                                    <TextBox.Text>
+                                        <Binding Path="opis" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Opis spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="426,17,0,0" Name="label9" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="426,371,0,0" Name="label10" Padding="0" VerticalAlignment="Top">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBox3,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBox3,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,245,0,0" Name="textBox4" VerticalAlignment="Top" Width="345" GotFocus="textBox4_GotFocus" LostFocus="textBox4_LostFocus">
+                                    <TextBox.Text>
+                                        <Binding Path="datum" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                                <val:CheckIfDateFormatRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Datum otkrivanja spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,211,0,0" Name="label11" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno. Format teksta mora biti 'xx/xx/xxxx'." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="14,274,0,0" Name="label12" Padding="0" VerticalAlignment="Top">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBox4,Path=(Validation.HasError)}" Value="True">
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBox4,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,342,0,0" Name="textBox5" VerticalAlignment="Top" Width="345">
+                                    <TextBox.Text>
+                                        <Binding Path="prihod" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                                <val:CheckIfOnlyNumbersRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Godisnji prihod od turizma (u dolarima)" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,308,0,0" Name="label13" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno. Tekst mora sadrzati samo brojeve." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="14,371,0,0" Name="label14" Padding="0" VerticalAlignment="Top">                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBox5,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBox5,Path=(Validation.HasError)}" Value="False">
+                                                <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <Label Content="Era porekla spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,502,0,0" Name="label15" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <ComboBox Height="23" SelectedValuePath="Content" HorizontalAlignment="Left" Margin="14,536,0,0" Name="comboBox2" Text="" VerticalAlignment="Top" Visibility="Visible" Width="346" SelectedIndex="0" SelectionChanged="comboBox2_SelectionChanged">
+                                    <ComboBoxItem Content="Paleolit" />
+                                    <ComboBoxItem Content="Neolit" />
+                                    <ComboBoxItem Content="Stari vek" />
+                                    <ComboBoxItem Content="Srednji vek" />
+                                    <ComboBoxItem Content="Renesansa" />
+                                    <ComboBoxItem Content="Moderno doba" />
+                                </ComboBox>
+                                <Label Content="Turisticki status spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,599,0,0" Name="label16" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <ComboBox Height="23" SelectedValuePath="Content" HorizontalAlignment="Left" Margin="14,633,0,0" Name="comboBox3" Text="" VerticalAlignment="Top" Visibility="Visible" Width="346" SelectedIndex="0">
+                                    <ComboBoxItem Content="Eksploatisan" />
+                                    <ComboBoxItem Content="Dostupan" />
+                                    <ComboBoxItem Content="Nedostupan" />
+                                </ComboBox>
+                                <!--
+                                <Label Content="Izaberi jednu od ponudjenih vrednosti." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="14,468,0,0" Visibility="Hidden" Name="label20" Padding="0" VerticalAlignment="Top" />
+                                -->
+                                <Label Content="Spomenik je arheoloski obradjen." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,696,0,0" Name="label18" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <CheckBox Height="16" HorizontalAlignment="Left" Margin="208,708,0,0" Name="checkBox1" VerticalAlignment="Top" />
+                                <Label Content="Spomenik je na listi UNESCO." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,730,0,0" Name="label22" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Spomenik se nalazi u naseljenom regionu." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,764,0,0" Name="label23" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <CheckBox Height="16" HorizontalAlignment="Left" Margin="186,742,0,0" Name="checkBox2" VerticalAlignment="Top" />
+                                <CheckBox Height="16" HorizontalAlignment="Left" Margin="256,776,0,0" Name="checkBox3" VerticalAlignment="Top" />
+                                <Label Content="OPCIONO: Ikonica spomenika" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="426,696,0,0" Name="label21" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Border BorderBrush="#FF000000" BorderThickness="1" Margin="426,733,330,0" Name="imageBorder" VerticalAlignment="Top">
+                                    <Image Height="32"  Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="32" />
+                                </Border>
+                                <Label Content="Ukoliko ne izaberes ikonicu, spomenik ce koristiti ikonicu tipa." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="426,776,0,0" Name="label24" Padding="0" VerticalAlignment="Top" />
+                                <Label Content="OPCIONO: Taguj spomenik" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="427,405,0,0" Name="label26" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Opciono, izaberi etikete kojima zelis da tagujes spomenik." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="424,662,0,0" Name="label27" Padding="0" VerticalAlignment="Top" />
+                                <ListBox ItemsSource="{Binding etikete}" DisplayMemberPath="oznaka" Height="217" HorizontalAlignment="Left" Margin="427,439,0,0" Name="listBox1" VerticalAlignment="Top" Width="344" SelectionMode="Multiple" SelectionChanged="listBox1_SelectionChanged" />
+                                <Button Content="Kreiraj novi spomenik" Height="46" Name="button2" Width="179" Margin="303,831,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="createSpomenik_Click" />
+                                <TextBlock Cursor="Hand" Height="23" HorizontalAlignment="Left" Margin="466,744,0,0" Name="spomenikIkonicaLink" Text="Klikni ovde da izaberes ikonicu" VerticalAlignment="Top" PreviewMouseDown="label_MouseLeftButtonDown" PreviewMouseLeftButtonDown="spomenikIkonicaLink_PreviewMouseLeftButtonDown"><TextBlock.Style><Style TargetType="TextBlock"><Style.Triggers><Trigger Property="UIElement.IsMouseOver" Value="True"><Setter Property="TextBlock.TextDecorations" Value="Underline" /></Trigger></Style.Triggers><Setter Property="TextBlock.Foreground" Value="Blue" /></Style></TextBlock.Style></TextBlock>
+                            </Grid>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Tip" Name="tipTab" Visibility="Hidden">
+                <Grid Background="White">
+                    <Rectangle HorizontalAlignment="Stretch" Margin="0,35,0,0" Name="rectBorderNoviTip" Stroke="Black" VerticalAlignment="Stretch" Fill="White" />
+                    <Rectangle Height="52" HorizontalAlignment="Stretch" Name="rectNoviTip" Stroke="Blue" VerticalAlignment="Top" Fill="Blue" Margin="1,36,1,0"/>
+                    <Label Content="Kreiraj novi tip" Height="50" HorizontalAlignment="Left" Name="labelNoviTip" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="1122" Foreground="White" FontWeight="Bold" FontSize="24" Margin="1,35,0,0" />
+                    <DockPanel Margin="1,92,1,1" Name="newTPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <ScrollViewer Name="scrollViewer2" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" ScrollChanged="scrollViewer1_ScrollChanged_1">
+                            <Grid Name="grid2" Width="375" VerticalAlignment="Center" Background="#FFE6E6E6" MaxHeight="Infinity" MinHeight="795" Height="790">
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,51,0,0" Name="textBoxTipOznaka" VerticalAlignment="Top" Width="346" TextChanged="textBoxTipOznaka_TextChanged">
+                                    <TextBox.Text>
+                                        <Binding Path="oznaka" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                                <val:CheckIfUniqueRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Oznaka Tipa" Height="28" HorizontalAlignment="Left" Margin="14,17,0,0" Name="labelTipOznaka" VerticalAlignment="Top" VerticalContentAlignment="Bottom" FontWeight="Bold" Padding="0" />
+                                <Label Content="Polje ne sme ostati prazno. Oznaka mora biti unikantna." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,80,0,0" Name="labelTipOznaka2" VerticalAlignment="Top" Padding="0" FontSize="12">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxTipOznaka,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxTipOznaka,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,148,0,0" Name="textBoxTipIme" VerticalAlignment="Top" Width="346" >
+                                    <TextBox.Text>
+                                        <Binding Path="ime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Ime tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,114,0,0" Name="labelTipIme" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="14,177,0,0" Name="labelTipIme2" Padding="0" VerticalAlignment="Top">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxTipIme,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxTipIme,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="314" HorizontalAlignment="Left" Margin="14,245,0,0" Name="textBoxTipOpis" VerticalAlignment="Top" Width="345" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="False" >
+                                <TextBox.Text>
+                                    <Binding Path="opis" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <val:CheckIfEmptyRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Opis tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,211,0,0" Name="labelTipOpis" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno." FontWeight="Bold" FontSize="12" Height="28" HorizontalAlignment="Left" Margin="14,565,0,0" Name="labelTipOpis2" Padding="0" VerticalAlignment="Top" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxTipOpis,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxTipOpis,Path=(Validation.HasError)}" Value="False">
+                                                    <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <Label Content="Ikonica tipa" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,599,0,0" Name="labelTipIkonica" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                
+                                <Label Visibility="Hidden" Content="Polje ne sme ostati prazno." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="14,679,0,0" Name="labelTipIkonica2" Padding="0" VerticalAlignment="Top" />
+                                <Border BorderBrush="#FF000000" BorderThickness="1" Margin="14,636,327,0" Name="border1" VerticalAlignment="Top" Height="34"></Border>
+                                <Button Content="Kreiraj novi tip" Height="46" HorizontalAlignment="Left" Margin="96,734,0,0" Name="button3" VerticalAlignment="Top" Width="179" Click="createTip_Click" />
+                                <Image Height="32" Name="image2" Stretch="Fill" VerticalAlignment="Top" Width="32" Margin="15,637,328,0" />
+                                <TextBlock Height="23" Cursor="Hand" HorizontalAlignment="Left" Margin="54,647,0,0" Name="textBlock1" Text="Klikni ovde da izaberes ikonicu" VerticalAlignment="Top" PreviewMouseLeftButtonDown="textBlock1_PreviewMouseLeftButtonDown">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property= "Foreground" Value="Blue"/>
+                                            <Style.Triggers>
+                                                <Trigger Property ="IsMouseOver" Value="True">
+                                                    <Setter Property= "TextDecorations" Value="Underline"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Etiketa" Name="etiketaTab" Visibility="Hidden">
+                <Grid Background="White">
+                    <Rectangle HorizontalAlignment="Stretch" Margin="0,35,0,0" Name="rectBorderNovaEtiketa" Stroke="Black" VerticalAlignment="Stretch" Fill="White" />
+                    <Rectangle Height="52" HorizontalAlignment="Stretch" Name="rectNovaEtiketa" Stroke="Blue" VerticalAlignment="Top" Fill="Blue" Margin="1,36,1,0"/>
+                    <Label Content="Kreiraj novu etiketu" Height="50" HorizontalAlignment="Left" Name="labelNovaEtiketa" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="272" Foreground="White" FontWeight="Bold" FontSize="24" Margin="1,35,0,0" />
+                    <DockPanel Margin="1,92,1,1" Name="newEPanel" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                        <ScrollViewer Name="scrollViewer3" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" ScrollChanged="scrollViewer1_ScrollChanged_1">
+                            <Grid Name="grid3" Width="375" VerticalAlignment="Center" Background="#FFE6E6E6" MaxHeight="Infinity" MinHeight="680" Height="680">
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="23" HorizontalAlignment="Left" Margin="14,51,0,0" Name="textBoxEtiketaOznaka" VerticalAlignment="Top" Width="346" TextChanged="textBoxEtiketaOznaka_TextChanged">
+                                <TextBox.Text>
+                                        <Binding Path="oznaka" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <val:CheckIfEmptyRule/>
+                                            <val:CheckIfUniqueRule/>
+                                            </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Oznaka etikete" Height="28" HorizontalAlignment="Left" Margin="14,17,0,0" Name="labelEtiketaOznaka" VerticalAlignment="Top" VerticalContentAlignment="Bottom" FontWeight="Bold" Padding="0" />
+                                <Label Content="Polje ne sme ostati prazno. Oznaka mora biti unikantna." FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,80,0,0" Name="labelEtiketaOznaka2" VerticalAlignment="Top" Padding="0" FontSize="12">
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxEtiketaOznaka,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxEtiketaOznaka,Path=(Validation.HasError)}" Value="False">
+                                                <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <TextBox Style="{StaticResource CustomTextBoxTextStyle}" Height="314" HorizontalAlignment="Left" Margin="14,245,0,0" Name="textBoxEtiketaOpis" VerticalAlignment="Top" Width="345" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="False">
+                                    <TextBox.Text>
+                                        <Binding Path="opis" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <val:CheckIfEmptyRule/>
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+                                <Label Content="Opis etikete" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,211,0,0" Name="labelEtiketaOpis" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Polje ne sme ostati prazno." FontSize="12" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,565,0,0" Name="labelEtiketaOpis2" Padding="0" VerticalAlignment="Top" >
+                                <Label.Style>
+                                    <Style TargetType="{x:Type Label}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxEtiketaOpis,Path=(Validation.HasError)}" Value="True">
+                                                <Setter Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=textBoxEtiketaOpis,Path=(Validation.HasError)}" Value="False">
+                                                <Setter Property="Foreground" Value="#FFE6E6E6" />
+                                            </DataTrigger>
+                                            </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                </Label>
+                                <Button Content="Kreiraj novu etiketu" Height="46" HorizontalAlignment="Left" Margin="96,620,0,0" Name="button4" VerticalAlignment="Top" Width="179" Click="createEtiketa_Click" />
+                                <wpfTool:ColorPicker HorizontalAlignment="Left" Margin="14,148,0,0" Name="colorPicker1" VerticalAlignment="Top" Width="60" Height="23" DisplayColorAndName="False" SelectedColor="White" />
+                                <Label Content="Boja etikete" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="14,114,0,0" Name="label28" Padding="0" VerticalAlignment="Top" VerticalContentAlignment="Bottom" />
+                                <Label Content="Izaberi boju. Ako se nista ne izabere, boja ce ostati bela." FontSize="12" Foreground="Black" Height="28" HorizontalAlignment="Left" Margin="14,177,0,0" Name="label29" Padding="0" VerticalAlignment="Top" />
+                            </Grid>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Help" Name="helpTab">
+                <Grid Background="White">
+                    <Rectangle Fill="White" HorizontalAlignment="Stretch" Margin="0,35,0,0" Name="rectangle1" Stroke="Black" VerticalAlignment="Stretch" />
+                    <Rectangle Fill="Blue" Height="52" HorizontalAlignment="Stretch" Margin="1,36,1,0" Name="rectangle2" Stroke="Blue" VerticalAlignment="Top" />
+                    <Label Content="Help" FontSize="24" FontWeight="Bold" Foreground="White" Height="50" HorizontalAlignment="Left" Margin="1,35,0,0" Name="label19" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="1330" />
+                    <TabControl HorizontalAlignment="Stretch" Margin="6,94,6,6" Name="tabControl2" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" TabStripPlacement="Left" SelectionChanged="tabControl2_SelectionChanged">
+                        <TabItem Header="O Aplikaciji" Name="tabItem1" FontWeight="Bold" FontSize="20">
+                            <Grid >
+                                <DockPanel Margin="6,6,-4,6" Name="newPanel1" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ZIndex="0">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewerX" VerticalContentAlignment="Stretch" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalScrollBarVisibility="Auto">
+                                        <Grid Name="gridX" Width="375" VerticalAlignment="Center" Background="White" MaxHeight="Infinity" Height="590">
+                                            <TextBlock Height="116" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock4" VerticalAlignment="Top" Width="363" SnapsToDevicePixels="False" TextWrapping="Wrap" FontWeight="Normal" 
+                                            Text="Aplikacija za vodjenje evidencije o mapi svetskih kulturnih spomenika sluzi da pomogne korisniku prilikom azuriranja spomenika." />
+                                            <TextBlock FontWeight="Normal" Height="159" HorizontalAlignment="Left" Margin="6,127,0,0" Name="textBlock5" SnapsToDevicePixels="False" Text="Korisniku pruza mogucnost da kreira, pretrazuje, menja i brise spomenike, tipove i etikete. Aplikacija sadrzi i mapu sveta na kojoj mogu da se pozicioniraju spomenici na odredjenu lokaciju." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Content="Idi na Glavnu stranicu - Spomenici" Height="68" HorizontalAlignment="Left" Margin="6,292,0,0" Name="button27" VerticalAlignment="Top" Width="363" Click="idiNaGlavnaStranaSpomenici_Click" />
+                                            <Button Content="Idi na Glavnu stranicu - Tipovi" Height="68" HorizontalAlignment="Left" Margin="6,366,0,0" Name="button28" VerticalAlignment="Top" Width="363" Click="idiNaGlavnaStranaTipovi_Click" />
+                                            <Button Content="Idi na Glavnu stranicu - Etikete" Height="68" HorizontalAlignment="Left" Margin="6,440,0,0" Name="button29" VerticalAlignment="Top" Width="363" Click="idiNaGlavnaStranaEtikete_Click" />
+                                            <Button Content="Idi na Glavnu stranicu - Mapa" Height="68" HorizontalAlignment="Left" Margin="6,514,0,0" Name="button30" VerticalAlignment="Top" Width="363" Click="idiNaGlavnaStranaMapa_Click" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Glavna stranica - Spomenici" Name="tabItem2">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel1" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer6" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="177" MaxHeight="Infinity" Name="grid9" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="89" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock6" SnapsToDevicePixels="False" Text="Ovaj deo je namenjen za vodjenje evidencije, kreiranje, izmenu, pretragu, filtriranje i brisanje spomenika." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Content="Idi na Glavnu stranicu - Spomenici" Height="68" HorizontalAlignment="Left" Margin="6,101,0,0" Name="button34" VerticalAlignment="Top" Width="363" Click="idiNaGlavnaStranaSpomenici_Click" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Pregled spomenika" Name="tabItem3">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel2" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer7" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="262" MaxHeight="Infinity" Name="grid10" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock7" SnapsToDevicePixels="False" Text="Ovde su izlistani svi spomenici koji su trenutno kreirani. Klikom na njih ce se omoguciti opcije kao sto su izmena, filtriranje i brisanje." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaSpomenici_Click" Content="Idi na Glavnu stranicu - Spomenici" Height="68" HorizontalAlignment="Left" Margin="6,188,0,0" Name="button35" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="54" HorizontalAlignment="Left" Margin="6,128,0,0" Name="textBlock9" SnapsToDevicePixels="False" Text="Moguce je refreshovati selekciju. Ovim ce se deselektovati svi spomenici." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izmena podataka o spomenicima" Name="tabItem5">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel4" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer9" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="262" MaxHeight="Infinity" Name="grid12" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock11" SnapsToDevicePixels="False" Text="Klikom na spomenik ce se, na desnoj strani, omoguciti korisniku izmena trenutno selektovanog atributa spomenika." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaSpomenici_Click" Content="Idi na Glavnu stranicu - Spomenici" Height="68" HorizontalAlignment="Left" Margin="6,188,0,0" Name="button32" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="54" HorizontalAlignment="Left" Margin="6,128,0,0" Name="textBlock12" SnapsToDevicePixels="False" Text="Klikom na levu/desnu strelicu moze se skociti na prethodni/sledeci atribut." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Filtriranje spomenika" Name="tabItem4">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel3" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer8" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="396" MaxHeight="Infinity" Name="grid11" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="243" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock8" SnapsToDevicePixels="False" Text="Ovde se mogu pronaci spomenici. Pretraga se vrsi klikom na kvadrat atributa po kom zelite da pretrazujete, a pritom izborom (ili upisom) zeljene vrednosti. Klikom na dugme &quot;Izlistaj spomenike&quot; ce se izlistati svi pronadjeni spomenici u vidu dugmeta. Klikom na dugme ce se selektovati odgovarajuci spomenik." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaSpomenici_Click" Content="Idi na Glavnu stranicu - Spomenici" Height="68" HorizontalAlignment="Left" Margin="6,319,0,0" Name="button31" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="58" HorizontalAlignment="Left" Margin="6,255,0,0" Name="textBlock10" SnapsToDevicePixels="False" Text="Takodje je moguce i refreshovati filtere i selekciju." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Kreiraj spomenik" Name="tabItem6">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel5" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer10" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="460" MaxHeight="Infinity" Name="grid13" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="246" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock13" SnapsToDevicePixels="False" Text="Ovde se vrsi kreiranje spomenika. Spomenik se kreira unosom zeljenih vrednosti atributa spomenika u odgovarajuca polja. Pojedina polja pruzaju izbor vise predefinisanih opcija, a neki pruzaju i opcije koje ste vec prethodno kreirali (izbor tipova i etiketa). Takodje je moguc i izbor ikonice koju ce imati spomenik." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="118" HorizontalAlignment="Left" Margin="6,258,0,0" Name="textBlock14" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Kreiraj Spomenik&quot; ce se kreirati novi spomenik i bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Content="Idi na Spomenik tab" Height="68" HorizontalAlignment="Left" Margin="6,382,0,0" Name="button39" VerticalAlignment="Top" Width="363" Click="idiNaSpomenikTab_Click" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Nadji spomenik" Name="tabItem7">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel6" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer11" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="508" MaxHeight="Infinity" Name="grid14" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="246" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock15" SnapsToDevicePixels="False" Text="Ovde se vrsi trazenje spomenika. Potrebno je uneti vrednosti atributa spomenika kog zelite da pronadjete u odgovarajuca polja. Pojedina polja pruzaju izbor vise predefinisanih opcija, a neki pruzaju i opcije koje ste vec prethodno kreirali (izbor tipova i etiketa). Takodje je moguc i izbor ikonice koju ce imati spomenik." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="166" HorizontalAlignment="Left" Margin="6,258,0,0" Name="textBlock16" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Nadji Spomenik&quot; ce se selektovati spomenik sa prethodno navedenim vrednostima (ako je pronadjen!) i  bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaSpomenikTab_Click" Content="Idi na Spomenik tab" Height="68" HorizontalAlignment="Left" Margin="6,430,0,0" Name="button40" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izmeni spomenik" Name="tabItem8">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel7" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer12" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="400" MaxHeight="Infinity" Name="grid15" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="199" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock17" SnapsToDevicePixels="False" Text="Ovde se vrsi izmena vrednosti selektovanog spomenika. Pri pokretanju akcije ce vec biti unete vrednosti atributa selektovanog spomenika. Za razliku od Izmene na glavnoj stranici, ovde je moguce promeniti vise atributa spomenika u jednom trenutku." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,211,0,0" Name="textBlock18" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Izmeni Spomenik&quot; ce se izmeniti vrednosti spomenika i  bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaSpomenikTab_Click" Content="Idi na Spomenik tab" Height="68" HorizontalAlignment="Left" Margin="6,326,0,0" Name="button41" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izbrisi spomenik" Name="tabItem9">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel8" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer13" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="294" MaxHeight="Infinity" Name="grid16" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="82" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock19" SnapsToDevicePixels="False" Text="Klikom na ovu opciju cete biti pitani da li ste sigurni da zelite da obrisete selektovan spomenik." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,94,0,0" Name="textBlock20" SnapsToDevicePixels="False" Text="Klikom na dugme &quot;Da&quot; cete obrisati selektovani spomenik." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,156,0,0" Name="textBlock21" SnapsToDevicePixels="False" Text="Klikom na dugme ne cete odustati od brisanja selektovanog spomenika." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaSpomenikTab_Click" Content="Idi na Spomenik tab" Height="68" HorizontalAlignment="Left" Margin="6,218,0,0" Name="button42" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Glavna stranica - Tipovi" Name="tabItem10">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel9" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer14" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="177" MaxHeight="Infinity" Name="grid17" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="89" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock22" SnapsToDevicePixels="False" Text="Ovaj deo je namenjen za vodjenje evidencije, kreiranje, izmenu, pretragu, filtriranje i brisanje tipova." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaTipovi_Click" Content="Idi na Glavnu stranicu - Tipovi" Height="68" HorizontalAlignment="Left" Margin="6,101,0,0" Name="button33" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Pregled tipova" Name="tabItem11">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel10" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer15" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="262" MaxHeight="Infinity" Name="grid18" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock23" SnapsToDevicePixels="False" Text="Ovde su izlistani svi tipovi koji su trenutno kreirani. Klikom na njih ce se omoguciti opcije kao sto su izmena, filtriranje i brisanje." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaTipovi_Click" Content="Idi na Glavnu stranicu - Tipovi" Height="68" HorizontalAlignment="Left" Margin="6,188,0,0" Name="button36" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="54" HorizontalAlignment="Left" Margin="6,128,0,0" Name="textBlock24" SnapsToDevicePixels="False" Text="Moguce je refreshovati selekciju. Ovim ce se deselektovati svi tipovi." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izmena podataka o tipovima" Name="tabItem12">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel11" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer16" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="237" MaxHeight="Infinity" Name="grid19" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="90" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock25" SnapsToDevicePixels="False" Text="Klikom na tip ce se, na desnoj strani, omoguciti korisniku izmena trenutno selektovanog atributa tipa." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaTipovi_Click" Content="Idi na Glavnu stranicu - Tipovi" Height="68" HorizontalAlignment="Left" Margin="6,161,0,0" Name="button37" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="54" HorizontalAlignment="Left" Margin="6,102,0,0" Name="textBlock26" SnapsToDevicePixels="False" Text="Klikom na levu/desnu strelicu moze se skociti na prethodni/sledeci atribut." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Filtriranje tipova" Name="tabItem13">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel12" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer17" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="370" MaxHeight="Infinity" Name="grid20" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="217" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock27" SnapsToDevicePixels="False" Text="Ovde se mogu pronaci tipovi. Pretraga se vrsi klikom na kvadrat atributa po kom zelite da pretrazujete, a pritom izborom (ili upisom) zeljene vrednosti. Klikom na dugme &quot;Izlistaj tipove&quot; ce se izlistati svi pronadjeni tipovi u vidu dugmeta. Klikom na dugme ce se selektovati odgovarajuci tip." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaTipovi_Click" Content="Idi na Glavnu stranicu - Tipovi" Height="68" HorizontalAlignment="Left" Margin="6,293,0,0" Name="button38" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="58" HorizontalAlignment="Left" Margin="6,229,0,0" Name="textBlock28" SnapsToDevicePixels="False" Text="Takodje je moguce i refreshovati filtere i selekciju." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Kreiraj tip" Name="tabItem14">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel13" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer18" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="285" MaxHeight="Infinity" Name="grid21" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="110" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock29" SnapsToDevicePixels="False" Text="Ovde se vrsi kreiranje tipa. Tip se kreira unosom zeljenih vrednosti atributa tipa u odgovarajuca polja. Takodje je moguc i izbor ikonice koju ce imati tip." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="85" HorizontalAlignment="Left" Margin="6,120,0,0" Name="textBlock30" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Kreiraj Tip&quot; ce se kreirati novi tip i bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Content="Idi na Tip tab" Height="68" HorizontalAlignment="Left" Margin="6,211,0,0" Name="button43" VerticalAlignment="Top" Width="363" Click="idiNaTipTab_Click" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Nadji tip" Name="tabItem15">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel14" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer19" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="368" MaxHeight="Infinity" Name="grid22" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="136" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock31" SnapsToDevicePixels="False" Text="Ovde se vrsi trazenje tipa. Potrebno je uneti vrednosti atributa tipa kog zelite da pronadjete u odgovarajuca polja. Takodje je moguc i izbor ikonice koju ce imati tip." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="139" HorizontalAlignment="Left" Margin="6,148,0,0" Name="textBlock32" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Nadji Tip&quot; ce se selektovati tip sa prethodno navedenim vrednostima (ako je pronadjen!) i  bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaTipTab_Click" Content="Idi na Tip tab" Height="68" HorizontalAlignment="Left" Margin="6,293,0,0" Name="button44" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izmeni tip" Name="tabItem16">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel15" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer20" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="398" MaxHeight="Infinity" Name="grid23" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="199" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock33" SnapsToDevicePixels="False" Text="Ovde se vrsi izmena vrednosti selektovanog tipa. Pri pokretanju akcije ce vec biti unete vrednosti atributa selektovanog tipa. Za razliku od Izmene na glavnoj stranici, ovde je moguce promeniti vise atributa tipa u jednom trenutku." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,211,0,0" Name="textBlock34" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Izmeni Tip&quot; ce se izmeniti vrednosti tipa i  bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaTipTab_Click" Content="Idi na Tip tab" Height="68" HorizontalAlignment="Left" Margin="6,324,0,0" Name="button45" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izbrisi tip" Name="tabItem17">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel16" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer21" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="291" MaxHeight="Infinity" Name="grid24" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="82" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock35" SnapsToDevicePixels="False" Text="Klikom na ovu opciju cete biti pitani da li ste sigurni da zelite da obrisete selektovan tip." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,94,0,0" Name="textBlock36" SnapsToDevicePixels="False" Text="Klikom na dugme &quot;Da&quot; cete obrisati selektovani tip." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,156,0,0" Name="textBlock37" SnapsToDevicePixels="False" Text="Klikom na dugme ne cete odustati od brisanja selektovanog tipa." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaTipTab_Click" Content="Idi na Tip tab" Height="68" HorizontalAlignment="Left" Margin="6,218,0,0" Name="button46" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Glavna stranica - Etikete" Name="tabItem18">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel17" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer22" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="177" MaxHeight="Infinity" Name="grid25" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="89" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock38" SnapsToDevicePixels="False" Text="Ovaj deo je namenjen za vodjenje evidencije, kreiranje, izmenu, pretragu, filtriranje i brisanje etiketa." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaEtikete_Click" Content="Idi na Glavnu stranicu - Etikete" Height="68" HorizontalAlignment="Left" Margin="6,101,0,0" Name="button47" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Pregled etiketa" Name="tabItem19">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel18" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer23" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="262" MaxHeight="Infinity" Name="grid26" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock39" SnapsToDevicePixels="False" Text="Ovde su izlistane sve etikete koje su trenutno kreirane. Klikom na njih ce se omoguciti opcije kao sto su izmena, filtriranje i brisanje." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaEtikete_Click" Content="Idi na Glavnu stranicu - Etikete" Height="68" HorizontalAlignment="Left" Margin="6,188,0,0" Name="button48" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="54" HorizontalAlignment="Left" Margin="6,128,0,0" Name="textBlock40" SnapsToDevicePixels="False" Text="Moguce je refreshovati selekciju. Ovim ce se deselektovati sve etikete." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izmena podataka o etiketama" Name="tabItem20">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel19" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer24" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="237" MaxHeight="Infinity" Name="grid27" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="90" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock41" SnapsToDevicePixels="False" Text="Klikom na tip ce se, na desnoj strani, omoguciti korisniku izmena trenutno selektovanog atributa etikete." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaEtikete_Click" Content="Idi na Glavnu stranicu - Etikete" Height="68" HorizontalAlignment="Left" Margin="6,161,0,0" Name="button49" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="54" HorizontalAlignment="Left" Margin="6,102,0,0" Name="textBlock42" SnapsToDevicePixels="False" Text="Klikom na levu/desnu strelicu moze se skociti na prethodni/sledeci atribut." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Filtriranje etiketa" Name="tabItem21">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel20" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer25" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="370" MaxHeight="Infinity" Name="grid28" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="217" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock43" SnapsToDevicePixels="False" Text="Ovde se mogu pronaci etikete. Pretraga se vrsi klikom na kvadrat atributa po kom zelite da pretrazujete, a pritom izborom (ili upisom) zeljene vrednosti. Klikom na dugme &quot;Izlistaj etikete&quot; ce se izlistati svi pronadjene etikete u vidu dugmeta. Klikom na dugme ce se selektovati odgovarajuca etiketa." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaEtikete_Click" Content="Idi na Glavnu stranicu - Etikete" Height="68" HorizontalAlignment="Left" Margin="6,293,0,0" Name="button50" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="58" HorizontalAlignment="Left" Margin="6,229,0,0" Name="textBlock44" SnapsToDevicePixels="False" Text="Takodje je moguce i refreshovati filtere i selekciju." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Kreiraj etiketu" Name="tabItem22">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel21" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer26" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="285" MaxHeight="Infinity" Name="grid29" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="110" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock45" SnapsToDevicePixels="False" Text="Ovde se vrsi kreiranje etiketa. Etiketa se kreira unosom zeljenih vrednosti atributa etikete u odgovarajuca polja. Takodje je moguc i izbor boje koju ce imati etiketa." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="85" HorizontalAlignment="Left" Margin="6,120,0,0" Name="textBlock46" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Kreiraj Etiketu&quot; ce se kreirati nova etiketa i bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Content="Idi na Etiketa tab" Height="68" HorizontalAlignment="Left" Margin="6,211,0,0" Name="button51" VerticalAlignment="Top" Width="363" Click="idiNaEtiketaTab_Click" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Nadji etiketu" Name="tabItem23">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel22" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer27" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="368" MaxHeight="Infinity" Name="grid30" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="136" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock47" SnapsToDevicePixels="False" Text="Ovde se vrsi trazenje etiketa. Potrebno je uneti vrednosti atributa etikete koju zelite da pronadjete u odgovarajuca polja. Takodje je moguc i izbor boje koju ce imati etiketa." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="139" HorizontalAlignment="Left" Margin="6,148,0,0" Name="textBlock48" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Nadji Etiketu&quot; ce se selektovati etiketa sa prethodno navedenim vrednostima (ako je pronadjena!) i  bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaEtiketaTab_Click" Content="Idi na Etiketa tab" Height="68" HorizontalAlignment="Left" Margin="6,293,0,0" Name="button52" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izmeni etiketu" Name="tabItem24">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel23" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer28" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="398" MaxHeight="Infinity" Name="grid31" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="199" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock49" SnapsToDevicePixels="False" Text="Ovde se vrsi izmena vrednosti selektovane etikete. Pri pokretanju akcije ce vec biti unete vrednosti atributa selektovane etikete. Za razliku od Izmene na glavnoj stranici, ovde je moguce promeniti vise atributa etikete u jednom trenutku." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="116" HorizontalAlignment="Left" Margin="6,211,0,0" Name="textBlock50" SnapsToDevicePixels="False" Text="Ako su svi podaci dobro uneti, klikom na dugme &quot;Izmeni Etiketu&quot; ce se izmeniti vrednosti etikete i  bicete odvedeni na glavnu stranicu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaEtiketaTab_Click" Content="Idi na Etiketa tab" Height="68" HorizontalAlignment="Left" Margin="6,324,0,0" Name="button53" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Izbrisi etiketu" Name="tabItem25">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel24" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer29" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="291" MaxHeight="Infinity" Name="grid32" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="82" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock51" SnapsToDevicePixels="False" Text="Klikom na ovu opciju cete biti pitani da li ste sigurni da zelite da obrisete selektovanu etiketu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,94,0,0" Name="textBlock52" SnapsToDevicePixels="False" Text="Klikom na dugme &quot;Da&quot; cete obrisati selektovanu etiketu." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,156,0,0" Name="textBlock53" SnapsToDevicePixels="False" Text="Klikom na dugme ne cete odustati od brisanja selektovane etikete." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaEtiketaTab_Click" Content="Idi na Etiketa tab" Height="68" HorizontalAlignment="Left" Margin="6,218,0,0" Name="button54" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Glavna stranica - Mapa" Name="tabItem26">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel25" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer30" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="201" MaxHeight="Infinity" Name="grid33" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="112" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock54" SnapsToDevicePixels="False" Text="Ovaj deo je namenjen za prevlacenje prethodno kreiranih spomenika na mapu. Moguce je pomeranje ikonica na mapi, kao i brisanje ikonica." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaMapa_Click" Content="Idi na Glavnu stranicu - Mapa" Height="68" HorizontalAlignment="Left" Margin="6,124,0,0" Name="button55" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Mapa" Name="tabItem27">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel26" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer31" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="255" MaxHeight="Infinity" Name="grid34" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="170" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock55" SnapsToDevicePixels="False" Text="Ovde mogu da se prevuku spomenici iz liste. Moguce je ukljuciti koliziju prilikom pomeranja spomenika dok je na mapi. Takodje je moguce uci u rezim brisanja, gde se klikom na spomenik on obrise sa mape." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <Button Click="idiNaGlavnaStranaMapa_Click" Content="Idi na Glavnu stranicu - Mapa" Height="68" HorizontalAlignment="Left" Margin="6,181,0,0" Name="button56" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                        <TabItem FontSize="20" FontWeight="Bold" Header="Shortcut Bar" Name="tabItem28">
+                            <Grid>
+                                <DockPanel Background="White" HorizontalAlignment="Stretch" Margin="6,6,-4,6" Name="dockPanel27" Panel.ZIndex="0" VerticalAlignment="Stretch">
+                                    <ScrollViewer Background="#FFE6E6E6" Name="scrollViewer32" ScrollChanged="scrollViewer1_ScrollChanged_1" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                        <Grid Background="White" Height="464" MaxHeight="Infinity" Name="grid35" VerticalAlignment="Center" Width="375">
+                                            <TextBlock FontWeight="Normal" Height="140" HorizontalAlignment="Left" Margin="6,6,0,0" Name="textBlock56" SnapsToDevicePixels="False" Text="Ovaj bar sadrzi skracenice ka svakom tabu i nalazi se na vrhu programa (ispod imena tabova). Sadrzi komande koje omogucavaju brze prolazenje kroz aplikaciju." TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="28" HorizontalAlignment="Left" Margin="6,141,0,0" Name="textBlock57" SnapsToDevicePixels="False" Text="G - skok na glavnu stranu" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="28" HorizontalAlignment="Left" Margin="6,175,0,0" Name="textBlock58" SnapsToDevicePixels="False" Text="S - skok na spomenik tab" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="28" HorizontalAlignment="Left" Margin="6,209,0,0" Name="textBlock59" SnapsToDevicePixels="False" Text="T - skok na tip tab" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="28" HorizontalAlignment="Left" Margin="6,243,0,0" Name="textBlock60" SnapsToDevicePixels="False" Text="E - skok na etiketa tab" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="28" HorizontalAlignment="Left" Margin="6,277,0,0" Name="textBlock61" SnapsToDevicePixels="False" Text="X - zatvori sve prozore osim glavnog" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="84" HorizontalAlignment="Left" Margin="6,311,0,0" Name="textBlock62" SnapsToDevicePixels="False" Text="Search - program ce pronaci spomenik, tip ili etiketu (ukoliko postoje) koji sadrzi tekst upisan u prostoru levo od dugmeta" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                            <TextBlock FontWeight="Normal" Height="56" HorizontalAlignment="Left" Margin="6,402,0,0" Name="textBlock63" SnapsToDevicePixels="False" Text="Help - skok na help tab ili otvaranje help taba ukoliko on nije otvoren" TextWrapping="Wrap" VerticalAlignment="Top" Width="363" />
+                                        </Grid>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                    <Button Background="White" BorderBrush="Blue" Content="Zatvori Help" FontWeight="Bold" Foreground="Blue" Height="42" HorizontalAlignment="Right" Margin="0,40,5,0" Name="button61" VerticalAlignment="Top" Width="130" Click="idiNaGlavniTabiRemoveHelpTab_Click" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
